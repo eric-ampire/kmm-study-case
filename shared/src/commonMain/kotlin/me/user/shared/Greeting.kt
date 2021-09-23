@@ -2,10 +2,11 @@ package me.user.shared
 
 
 class Greeting {
-    fun hello(message: String) {
+  fun hello(message: String) {
 
-    }
-    fun greeting(): String {
-        return "Hello, ${Platform().platform}!"
-    }
+  }
+
+  fun greeting(): String {
+    return "Hello, ${Platform().platform}!"
+  }
 }

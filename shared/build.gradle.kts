@@ -1,54 +1,63 @@
 plugins {
-    kotlin("multiplatform")
-    id("com.android.library")
-    id("kotlin-android-extensions")
+  kotlin("multiplatform")
+  id("com.android.library")
+  id("kotlin-android-extensions")
+  kotlin("plugin.serialization") version Version.kotlin
 }
 
 repositories {
-    google()
-    jcenter()
+  google()
+  jcenter()
 }
 
 kotlin {
-    android()
-    ios {
-        binaries {
-            framework {
-                baseName = "shared"
-            }
-        }
+  android()
+  ios {
+    binaries {
+      framework {
+        baseName = "shared"
+      }
     }
-    sourceSets {
-        val commonMain by getting
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
-        val androidMain by getting {
-            dependencies {
-                implementation("com.google.android.material:material:1.2.1")
-            }
-        }
-        val androidTest by getting {
-            dependencies {
-                implementation("junit:junit:4.13")
-            }
-        }
-        val iosMain by getting
-        val iosTest by getting
+  }
+  sourceSets {
+    // Common
+    val commonMain by getting {
+      dependencies {
+        implementation(Libs.Common.kotlinx_datetime)
+        implementation(Libs.Common.kotlinx_coroutine_core)
+        implementation(Libs.Common.koin_core)
+        implementation(Libs.Common.firebase_auth)
+        implementation(Libs.Common.firebase_firestore)
+      }
     }
+    val commonTest by getting {
+      dependencies {
+        implementation(kotlin("test-common"))
+        implementation(kotlin("test-annotations-common"))
+        implementation(Libs.Common.koin_test)
+        implementation(Libs.Common.mockk)
+      }
+    }
+
+    // Android
+    val androidMain by getting
+    val androidTest by getting
+
+    // iOS
+    val iosMain by getting
+    val iosTest by getting
+  }
 }
 
 android {
-    compileSdkVersion(29)
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(29)
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
+  compileSdkVersion(29)
+  sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+  defaultConfig {
+    minSdkVersion(24)
+    targetSdkVersion(29)
+  }
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
 }
